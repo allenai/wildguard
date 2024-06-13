@@ -14,6 +14,9 @@ import torch
 from .utils import load_hf_model, load_tokenizer, subprocess_inference_with_vllm, inference_with_vllm, WILDGUARD_INPUT_FORMAT
 
 
+MODEL_NAME = "allenai/wildguard"
+
+
 class PromptHarmfulness(Enum):
 	HARMFUL = "harmful"
 	UNHARMFUL = "unharmful"
@@ -32,16 +35,15 @@ class ResponseHarmfulness(Enum):
 @dataclass
 class SafetyClassifierOutput:
     """
-    Represents the output of a safety classifier model, including information about the prompt harmfulness, response refusal, response satisfaction, response harmfulness, and any associated metadata.
+    Represents the output of a safety classifier model, including information about the prompt harmfulness, response refusal, and response harmfulness.
 
     This is the union of fields that each safety classifier outputs. 
     For each classifier's specific outputs, check classifier.get_output_fields().
     When creating a classifier with new output fields, add them into this class as well.
-    
+
     The `prompt_harmfulness` field indicates whether the input prompt was assessed as harmful, sensitive, or unharmful.
     The `response_harmfulness` field indicates whether the generated response was assessed as harmful, sensitive, or unharmful.
     The `response_refusal` field indicates whether the model complied or refused to generate a response.
-    The `metadata` field contains any additional information associated with the classification.
     The `is_parsing_error` field indicates whether there was an error parsing the input or output. If true, the other fields may be invalid.
     """
 
@@ -49,7 +51,6 @@ class SafetyClassifierOutput:
     response_harmfulness: ResponseHarmfulness | None = None
     response_refusal: ResponseRefusal | None = None
 
-    metadata: dict | None = None
     is_parsing_error: bool = False
 
     def asdict(self, keep_none=False):
@@ -235,7 +236,7 @@ class WildGuardVLLM(WildGuard):
         if ephemeral_model:
             self.model = None
         else:
-            self.model = LLM(model="allenai/wildguard")
+            self.model = LLM(model=MODEL_NAME)
 
     @torch.inference_mode()
     def _classify_batch(self, batch: list[dict[str, str]]) -> list[SafetyClassifierOutput]:
@@ -243,7 +244,7 @@ class WildGuardVLLM(WildGuard):
         if self.model is None:
             decoded_outputs = subprocess_inference_with_vllm(
                 prompts=formatted_prompts,
-                model_name_or_path="allenai/wildguard",
+                model_name_or_path=MODEL_NAME,
                 max_tokens=128,
                 temperature=0.0,
                 top_p=1.0,
@@ -272,8 +273,8 @@ class WildGuardHF(WildGuard):
     ):
         super().__init__(batch_size)
         self.device = device
-        self.model = load_hf_model("allenai/wildguard", device)
-        self.tokenizer = load_tokenizer("allenai/wildguard")
+        self.model = load_hf_model(MODEL_NAME, device)
+        self.tokenizer = load_tokenizer(MODEL_NAME)
         self.ephemeral_model = ephemeral_model
 
     def _classify_batch(self, batch: list[dict[str, str]]) -> list[SafetyClassifierOutput]:
@@ -308,7 +309,7 @@ class WildGuardHF(WildGuard):
             save_func: Callable[[list[dict[str, Any]]], None] | None = None
     ) -> list[SafetyClassifierOutput]:
         if self.model is None:
-            self.model = load_hf_model("allenai/wildguard", self.device)
+            self.model = load_hf_model(MODEL_NAME, self.device)
 
         outputs = super().classify(items, save_func)
 

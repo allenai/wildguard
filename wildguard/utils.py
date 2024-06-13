@@ -63,7 +63,6 @@ def create_and_inference_with_vllm(
     result = inference_with_vllm(
         prompts=prompts,
         model=llm,
-        model_name_or_path=model_name_or_path,
         use_tqdm=use_tqdm,
         temperature=temperature,
         top_p=top_p,
