@@ -1,7 +1,7 @@
 import unittest
 
-from wildguard import PromptHarmfulness, ResponseHarmfulness, ResponseRefusal
-from wildguard.wildguard import load_wildguard
+from wildguard import load_wildguard
+from wildguard.wildguard import PromptHarmfulness, ResponseHarmfulness, ResponseRefusal
 
 
 class TestSanityCheck(unittest.TestCase):
