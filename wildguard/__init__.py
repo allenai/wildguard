@@ -4,6 +4,7 @@ def load_wildguard(
         use_vllm: bool = True,
         device: str = 'cuda',
         ephemeral_model: bool = True,
+        batch_size: int | None = None,
 ) -> WildGuard:
     """
     Loads a WildGuard model for classification.
@@ -14,6 +15,10 @@ def load_wildguard(
                             Set this to False if you will be calling classify() multiple times. Default: True.
     """
     if use_vllm:
-        return WildGuardVLLM(ephemeral_model=ephemeral_model)
+        if batch_size == None:
+            batch_size = -1
+        return WildGuardVLLM(ephemeral_model=ephemeral_model, batch_size=batch_size)
     else:
-        return WildGuardHF(device=device, ephemeral_model=ephemeral_model)
+        if batch_size == None:
+            batch_size = 16
+        return WildGuardHF(device=device, ephemeral_model=ephemeral_model, batch_size=batch_size)
