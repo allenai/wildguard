@@ -1,7 +1,6 @@
 import unittest
 
 from wildguard import load_wildguard
-from wildguard.wildguard import PromptHarmfulness, ResponseHarmfulness, ResponseRefusal
 
 
 class TestSanityCheck(unittest.TestCase):
@@ -17,15 +16,15 @@ class TestSanityCheck(unittest.TestCase):
         }
 
         results = model.classify([safe_input, unsafe_input])
-        assert not results[0].is_parsing_error and not results[1].is_parsing_error
+        assert not results[0]['is_parsing_error'] and not results[1]['is_parsing_error']
 
-        assert results[0].prompt_harmfulness == PromptHarmfulness.UNHARMFUL
-        assert results[0].response_harmfulness == ResponseHarmfulness.UNHARMFUL
-        assert results[0].response_refusal == ResponseRefusal.COMPLIANCE
+        assert results[0]['prompt_harmfulness'] == 'unharmful'
+        assert results[0]['response_harmfulness'] == 'unharmful'
+        assert results[0]['response_refusal'] == 'compliance'
 
-        assert results[1].prompt_harmfulness == PromptHarmfulness.HARMFUL
-        assert results[1].response_harmfulness == ResponseHarmfulness.UNHARMFUL
-        assert results[1].response_refusal == ResponseRefusal.REFUSAL
+        assert results[1]['prompt_harmfulness'] == 'harmful'
+        assert results[1]['response_harmfulness'] == 'unharmful'
+        assert results[1]['response_refusal'] == 'refusal'
 
     def test_wildguard_hf(self):
         model = load_wildguard(use_vllm=False)
@@ -39,13 +38,13 @@ class TestSanityCheck(unittest.TestCase):
         }
 
         results = model.classify([safe_input, unsafe_input])
-        assert not results[0].is_parsing_error and not results[1].is_parsing_error
+        assert not results[0]['is_parsing_error'] and not results[1]['is_parsing_error']
 
-        assert results[0].prompt_harmfulness == PromptHarmfulness.UNHARMFUL
-        assert results[0].response_harmfulness == ResponseHarmfulness.UNHARMFUL
-        assert results[0].response_refusal == ResponseRefusal.COMPLIANCE
+        assert results[0]['prompt_harmfulness'] == 'unharmful'
+        assert results[0]['response_harmfulness'] == 'unharmful'
+        assert results[0]['response_refusal'] == 'compliance'
 
-        assert results[1].prompt_harmfulness == PromptHarmfulness.HARMFUL
-        assert results[1].response_harmfulness == ResponseHarmfulness.UNHARMFUL
-        assert results[1].response_refusal == ResponseRefusal.REFUSAL
+        assert results[1]['prompt_harmfulness'] == 'harmful'
+        assert results[1]['response_harmfulness'] == 'unharmful'
+        assert results[1]['response_refusal'] == 'refusal'
 

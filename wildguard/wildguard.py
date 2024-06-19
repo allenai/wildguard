@@ -242,7 +242,6 @@ class WildGuardHF(WildGuard):
         decoded_outputs = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
         decoded_outputs = [output.split("<|assistant|>")[1].strip() for output in decoded_outputs]
         outputs = [self.parse_model_generation_to_output(output) for output in decoded_outputs]
-        print(decoded_outputs)
 
         return outputs
 
