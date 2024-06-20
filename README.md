@@ -2,6 +2,8 @@
 
 WildGuard is a safety classification model for user-model chat exchanges. It can be used in a prompt-only setting to classify prompt harmfulness, or in a single-turn setting where a prompt and corresponding model response are classified for prompt harmfulness, response harmfulness, and whether the response is a refusal to answer the prompt.
 
+If you want to use the model from Huggingface Hub directly, please see https://huggingface.co/allenai/wildguard. 
+
 ## Example Usage
 ```python
 from wildguard import load_wildguard
@@ -53,3 +55,7 @@ results = wildguard.classify(items)
 - `'response_harmfulness'`: `str | None`, either `'harmful'` or `'unharmful'`. If a response was not provided in the input, it is `None`.
 - `'response_refusal'`: `str | None`, either `'refusal'` or `'compliance'`. If a response was not provided in the input, it is `None`.
 - `'is_parsing_error'`: `bool`, `True` if parsing the model output failed. If this is `True`, the rest of the results may be invalid.
+
+## Citation
+```
+```
