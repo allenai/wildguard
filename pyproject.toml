@@ -6,16 +6,19 @@ build-backend = "setuptools.build_meta"
 name = "wildguard"
 version = "0.0.1"
 authors = [
-  { name="Kavel Rao", email="kavelrao@cs.washington.edu" },
-  { name="Seungju Han", email="wade3han@snu.ac.kr" },
+  { name = "Kavel Rao", email = "kavelrao@cs.washington.edu" },
+  { name = "Seungju Han", email = "wade3han@snu.ac.kr" },
 ]
 description = "WildGuard safety classification inference"
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
 ]
+
+[tool.setuptools]
+packages = ["wildguard"]
 
 [project.urls]
 Homepage = "https://github.com/allenai/wildguard"
