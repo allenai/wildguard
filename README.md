@@ -60,6 +60,9 @@ Prompt harmfulness: unharmful
 
 For detailed documentation, please see our [API Reference](docs/api_reference.md) and [User Guide](docs/user_guide.md).
 
+Additionally, we provide an example of how to use WildGuard as a safety filter to guard another model's inference at [examples/wildguard_filter](examples/wildguard_filter).
+
 ## Citation
+
 ```
 ```
