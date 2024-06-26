@@ -1,4 +1,4 @@
-# WildGuard: Open One-stop Moderation Tools for Safety Risks, Jailbreaks, and Refusals of LLMs
+# WildGuard
 
 <p align="center">
   <a href="https://arxiv.org/abs/xx">
