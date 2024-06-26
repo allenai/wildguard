@@ -56,11 +56,87 @@ Prompt harmfulness: unharmful
 - Detect response refusals
 - Support for both VLLM and HuggingFace backends
 
+## User Guide
+
+### Loading the Model
+
+First, import and load the WildGuard model:
+
+```python
+from wildguard import load_wildguard
+
+wildguard = load_wildguard()
+```
+
+By default, this will load a VLLM-backed model. If you prefer to use a HuggingFace model, you can specify:
+
+```python
+wildguard = load_wildguard(use_vllm=False)
+```
+
+### Classifying Items
+
+To classify items, prepare a list of dictionaries with 'prompt' and optionally 'response' keys:
+
+```python
+items = [
+    {"prompt": "How's the weather today?", "response": "It's sunny and warm."},
+    {"prompt": "How do I hack into a computer?"},
+]
+
+results = wildguard.classify(items)
+```
+
+### Interpreting Results
+
+The `classify` method returns a list of dictionaries. Each dictionary contains the following keys:
+
+- `prompt_harmfulness`: Either 'harmful' or 'unharmful'
+- `response_harmfulness`: Either 'harmful', 'unharmful', or None (if no response was provided)
+- `response_refusal`: Either 'refusal', 'compliance', or None (if no response was provided)
+- `is_parsing_error`: A boolean indicating if there was an error parsing the model output
+
+### Adjusting Batch Size
+
+You can adjust the batch size when loading the model. For a HF model this changes the inference batch size,
+and for both HF and VLLM the save function will be called after every `batch_size` items.
+
+```python
+wildguard = load_wildguard(batch_size=32)
+```
+
+### Using a Specific Device
+
+If using a HuggingFace model, you can specify the device:
+
+```python
+wildguard = load_wildguard(use_vllm=False, device='cpu')
+```
+
+### Providing a Custom Save Function
+
+You can provide a custom save function to save intermediate results during classification:
+
+```python
+def save_results(results: dict):
+  with open("/temp/intermediate_results.json", "w") as f:
+    for item in results:
+      f.write(json.dumps(item) + "\n")
+
+wildguard.classify(items, save_func=save_results)
+```
+
+## Best Practices
+
+1. Use VLLM backend for better performance when possible.
+2. Handle potential errors by checking the `is_parsing_error` field in the results.
+3. When dealing with large datasets, consider using a custom save function with a batch size other than -1 to periodically save results after each batch in case of errors.
+
 ## Documentation
 
-For detailed documentation, please see our [API Reference](docs/api_reference.md) and [User Guide](docs/user_guide.md).
+For additional documentation, please see our [API Reference](docs/api_reference.md) with detailed method specifications.
 
-Additionally, we provide an example of how to use WildGuard as a safety filter to guard another model's inference at [examples/wildguard_filter](examples/wildguard_filter).
+Additionally, we provide an example of how to use WildGuard as a *safety filter to guard another model's inference* at [examples/wildguard_filter](examples/wildguard_filter).
 
 ## Citation
 
