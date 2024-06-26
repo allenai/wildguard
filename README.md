@@ -2,6 +2,8 @@
 
 WildGuard is a safety classification model for user-model chat exchanges. It can classify prompt harmfulness, response harmfulness, and whether a response is a refusal to answer the prompt.
 
+Comment from Liwei: Maybe add the paper/author info here. Also include the Huggingface model url.
+
 ## Installation
 
 ```bash
