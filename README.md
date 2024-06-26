@@ -1,8 +1,29 @@
 # WildGuard
 
-WildGuard is a safety classification model for user-model chat exchanges. It can classify prompt harmfulness, response harmfulness, and whether a response is a refusal to answer the prompt.
+<p align="center">
+  <a href="https://arxiv.org/abs/xx">
+    <img src="https://img.shields.io/badge/📝-Paper-blue">
+  </a>
+  <a href="https://huggingface.co/datasets/allenai/wildguardmix">
+    <img src="https://img.shields.io/badge/🤗-Data-orange">
+  </a>
+  <a href="https://huggingface.co/allenai/wildguard">
+    <img src="https://img.shields.io/badge/🤗-Model-green">
+  </a>
+</p>
 
-Comment from Liwei: Maybe add the paper/author info here. Also include the Huggingface model url.
+**Authors:**
+[Seungju Han](https://seungjuhan.me) ⭐,
+[Kavel Rao](https://kavelrao.dev) ⭐,
+[Allyson Ettinger](https://aetting.github.io) *,
+[Liwei Jiang](https://liweijiang.me) *,
+[Yuchen Lin](https://yuchenlin.xyz/),
+[Nathan Lambert](https://www.natolambert.com/),
+[Yejin Choi](https://homes.cs.washington.edu/~yejin/),
+[Nouha Dziri](https://nouhadziri.github.io/)
+&nbsp; &nbsp; &nbsp; ⭐ Co-first authors, * co-second authors
+
+WildGuard is a safety classification model for user-model chat exchanges. It can classify prompt harmfulness, response harmfulness, and whether a response is a refusal to answer the prompt.
 
 ## Installation
 
