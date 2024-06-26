@@ -1,4 +1,4 @@
-# WildGuard
+# WildGuard: Open One-stop Moderation Tools for Safety Risks, Jailbreaks, and Refusals of LLMs
 
 <p align="center">
   <a href="https://arxiv.org/abs/xx">
@@ -21,7 +21,8 @@
 [Nathan Lambert](https://www.natolambert.com/),
 [Yejin Choi](https://homes.cs.washington.edu/~yejin/),
 [Nouha Dziri](https://nouhadziri.github.io/)
-&nbsp; &nbsp; &nbsp; ⭐ Co-first authors, * co-second authors
+
+⭐ Co-first authors, * co-second authors
 
 WildGuard is a safety classification model for user-model chat exchanges. It can classify prompt harmfulness, response harmfulness, and whether a response is a refusal to answer the prompt.
 
