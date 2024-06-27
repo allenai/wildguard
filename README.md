@@ -171,6 +171,6 @@ If you find it helpful, please feel free to cite our work!
       title={{WILDGUARD: Open One-stop Moderation Tools for Safety Risks, Jailbreaks, and Refusals of LLMs}}, 
       author={{Seungju Han and Kavel Rao and Allyson Ettinger and Liwei Jiang and Bill Yuchen Lin and Nathan Lambert and Yejin Choi and Nouha Dziri}}
       year={2024},
-      archivePrefix={arXiv preprint arXiv:2406.18495},
+      journal={arXiv preprint arXiv:2406.18495},
       primaryClass={cs.CL}
 }
