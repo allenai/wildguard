@@ -23,9 +23,7 @@
 [Nouha Dziri](https://nouhadziri.github.io/)
 
 ⭐ Co-first authors, * co-second authors
-
-This repo hosts the code for the work [WildGuard: Open One-stop Moderation Tools for Safety Risks, Jailbreaks, and Refusals of LLMs](https://arxiv.org/pdf/2406.18495)
-WildGuard is a safety classification model for user-model chat exchanges. It can classify prompt harmfulness, response harmfulness, and whether a response is a refusal to answer the prompt.
+[WildGuard](https://arxiv.org/pdf/2406.18495) is a safety classification model for user-model chat exchanges. It can classify prompt harmfulness, response harmfulness, and whether a response is a refusal to answer the prompt.
 
 ## Installation
 
