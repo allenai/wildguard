@@ -15,14 +15,14 @@
 **Authors:**
 [Seungju Han](https://seungjuhan.me) ⭐,
 [Kavel Rao](https://kavelrao.dev) ⭐,
-[Allyson Ettinger](https://aetting.github.io) *,
-[Liwei Jiang](https://liweijiang.me) *,
+[Allyson Ettinger](https://aetting.github.io) ☀️,
+[Liwei Jiang](https://liweijiang.me) ☀️,
 [Yuchen Lin](https://yuchenlin.xyz/),
 [Nathan Lambert](https://www.natolambert.com/),
 [Yejin Choi](https://homes.cs.washington.edu/~yejin/),
 [Nouha Dziri](https://nouhadziri.github.io/)
 
-⭐ Co-first authors, * co-second authors
+⭐ Co-first authors, ☀️ co-second authors
 
 [WildGuard](https://arxiv.org/pdf/2406.18495) is a safety classification model for user-model chat exchanges. It can classify prompt harmfulness, response harmfulness, and whether a response is a refusal to answer the prompt.
 
