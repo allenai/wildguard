@@ -167,10 +167,12 @@ Additionally, we provide an example of how to use WildGuard as a *safety filter 
 If you find it helpful, please feel free to cite our work!
 ```
 @misc{wildguard2024,
-      title={{WILDGUARD: Open One-stop Moderation Tools for Safety Risks, Jailbreaks, and Refusals of LLMs}}, 
-      author={{Seungju Han and Kavel Rao and Allyson Ettinger and Liwei Jiang and Bill Yuchen Lin and Nathan Lambert and Yejin Choi and Nouha Dziri}}
+      title={WildGuard: Open One-Stop Moderation Tools for Safety Risks, Jailbreaks, and Refusals of LLMs}, 
+      author={Seungju Han and Kavel Rao and Allyson Ettinger and Liwei Jiang and Bill Yuchen Lin and Nathan Lambert and Yejin Choi and Nouha Dziri},
       year={2024},
-      journal={arXiv preprint arXiv:2406.18495},
-      primaryClass={cs.CL}
+      eprint={2406.18495},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2406.18495}, 
 }
 ```
