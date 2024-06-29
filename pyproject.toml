@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wildguard"
-version = "0.0.1"
+version = "1.0.0"
 authors = [
   { name = "Kavel Rao", email = "kavelrao@cs.washington.edu" },
   { name = "Seungju Han", email = "wade3han@snu.ac.kr" },
@@ -15,6 +15,12 @@ requires-python = ">=3.10"
 classifiers = [
   "Programming Language :: Python :: 3",
   "Operating System :: OS Independent",
+]
+dependencies = [
+  "torch>=2.3.0",
+  "tqdm>=4.66.2",
+  "transformers>=4.40.2",
+  "vllm>=0.4.2",
 ]
 
 [tool.setuptools]
