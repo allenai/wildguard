@@ -15,6 +15,7 @@ def load_wildguard(
                             Set this to False if you will be calling classify() multiple times. Default: True.
     """
     if use_vllm:
+        ephemeral_model = False
         if batch_size == None:
             batch_size = -1
         return WildGuardVLLM(ephemeral_model=ephemeral_model, batch_size=batch_size)
