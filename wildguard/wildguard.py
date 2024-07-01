@@ -179,7 +179,12 @@ class WildGuardVLLM(WildGuard):
         if ephemeral_model:
             self.model = None
         else:
-            self.model = LLM(model=MODEL_NAME)
+            gpu_name = torch.cuda.get_device_name(0)
+            if gpu_name == 'NVIDIA GeForce RTX 3090':
+                self.model = LLM(model=MODEL_NAME,max_model_len=30448)
+            else:
+                self.model = LLM(model=MODEL_NAME)
+
 
     @torch.inference_mode()
     def _classify_batch(self, batch: list[dict[str, str]]) -> list[SafetyClassifierOutput]:
