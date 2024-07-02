@@ -16,7 +16,7 @@ from .utils import (
     SafetyClassifierOutput,
     PromptHarmfulness,
     ResponseHarmfulness,
-    ResponseRefusal
+    ResponseRefusal,
 )
 
 
@@ -36,7 +36,10 @@ class SafetyClassifierBase(ABC):
         Returns a list of all the input fields that can be used by the classifier.
         Invariant: set(get_required_input_fields() + get_optional_input_fields()) == set(get_possible_input_fields())
         """
-        return list(set(self.get_required_input_fields()) | set(self.get_optional_input_fields()))
+        return list(
+            set(self.get_required_input_fields())
+            | set(self.get_optional_input_fields())
+        )
 
     @abstractmethod
     def get_required_input_fields(self) -> list[str]:
@@ -61,41 +64,51 @@ class SafetyClassifierBase(ABC):
         raise NotImplementedError()
 
     def classify(
-            self,
-            items: list[dict[str, str]],
-            save_func: Callable[[list[dict[str, Any]]], None] | None = None
+        self,
+        items: list[dict[str, str]],
+        save_func: Callable[[list[dict[str, Any]]], None] | None = None,
     ) -> list[dict[str, Any]]:
         """
         Classify user-model chat exchanges for safety.
-        @param items: A list of inputs, where each item is a dictionary containing all 
+        @param items: A list of inputs, where each item is a dictionary containing all
                       of get_required_input_fields() and optionally get_optional_input_fields().
                       For example, if get_required_input_fields() returns ['prompt', 'response'],
                       each item should have keys 'prompt' and 'response'.
-        @param save_func: A function that saves the (intermediate) results of the classifier. 
+        @param save_func: A function that saves the (intermediate) results of the classifier.
                           If provided, will be called after each batch. Should accept a list of dictionaries.
-        @return list of dictionaries with fields 
+        @return list of dictionaries with fields
             `prompt_harmfulness` (str, one of {'harmful', 'unharmful'}),
             `response_harmfulness` (str, one of {'harmful', 'unharmful'}),
             `response_refusal` (str, one of {'refusal', 'compliance}), and
             `is_parsing_error` (bool)
         """
-        assert all(field in items[0] for field in self.get_required_input_fields()), "Missing required classifier input fields."
+        assert all(
+            field in items[0] for field in self.get_required_input_fields()
+        ), "Missing required classifier input fields."
         batch_size = len(items) if self.batch_size == -1 else self.batch_size
         results: Sequence[dict[str, Any]] = []
-        for batch_start in tqdm(range(0, len(items), batch_size), total=len(items) // batch_size):
+        for batch_start in tqdm(
+            range(0, len(items), batch_size), total=len(items) // batch_size
+        ):
             batch = items[batch_start : batch_start + batch_size]
             batch_results = self._classify_batch(batch)
             results += [r.asdict(keep_none=True) for r in batch_results]
 
             if save_func:
-                save_func([r.asdict(keep_none=True) if isinstance(r, SafetyClassifierOutput) else r for r in results])
+                save_func(
+                    [
+                        r.asdict(keep_none=True)
+                        if isinstance(r, SafetyClassifierOutput)
+                        else r
+                        for r in results
+                    ]
+                )
 
         return results
 
     @abstractmethod
     def _classify_batch(
-            self,
-            batch: list[dict[str, str]]
+        self, batch: list[dict[str, str]]
     ) -> list[SafetyClassifierOutput]:
         raise NotImplementedError()
 
@@ -150,7 +163,7 @@ class WildGuard(SafetyClassifierBase, ABC):
             prompt_harmfulness=is_user_request_harmful,
             response_harmfulness=is_assistant_response_harmful,
             response_refusal=is_assistant_response_refusal,
-            is_parsing_error=is_parse_error
+            is_parsing_error=is_parse_error,
         )
 
         return safety_output
@@ -162,27 +175,24 @@ class WildGuard(SafetyClassifierBase, ABC):
             if "response" not in item:
                 item["response"] = ""
             formatted_prompt = WILDGUARD_INPUT_FORMAT.format(
-                prompt=item["prompt"],
-                response=item["response"]
+                prompt=item["prompt"], response=item["response"]
             )
             inputs.append(formatted_prompt)
         return inputs
 
 
 class WildGuardVLLM(WildGuard):
-    def __init__(
-            self,
-            batch_size: int = -1,
-            ephemeral_model: bool = True
-    ):
+    def __init__(self, batch_size: int = -1, ephemeral_model: bool = True):
         super().__init__(batch_size)
         if ephemeral_model:
             self.model = None
         else:
-            self.model = LLM(model=MODEL_NAME)
+            self.model = LLM(model=MODEL_NAME, tokenizer_mode="slow")
 
     @torch.inference_mode()
-    def _classify_batch(self, batch: list[dict[str, str]]) -> list[SafetyClassifierOutput]:
+    def _classify_batch(
+        self, batch: list[dict[str, str]]
+    ) -> list[SafetyClassifierOutput]:
         formatted_prompts = self.build_input_prompts(batch)
         if self.model is None:
             decoded_outputs = subprocess_inference_with_vllm(
@@ -191,7 +201,7 @@ class WildGuardVLLM(WildGuard):
                 max_tokens=128,
                 temperature=0.0,
                 top_p=1.0,
-                use_tqdm=True
+                use_tqdm=True,
             )
         else:
             decoded_outputs = inference_with_vllm(
@@ -200,27 +210,28 @@ class WildGuardVLLM(WildGuard):
                 max_tokens=128,
                 temperature=0.0,
                 top_p=1.0,
-                use_tqdm=True
+                use_tqdm=True,
             )
-        outputs = [self.parse_model_generation_to_output(output) for output in decoded_outputs]
+        outputs = [
+            self.parse_model_generation_to_output(output) for output in decoded_outputs
+        ]
 
         return outputs
 
 
 class WildGuardHF(WildGuard):
     def __init__(
-            self,
-            batch_size: int = 16,
-            device: str = 'cuda',
-            ephemeral_model: bool = True
+        self, batch_size: int = 16, device: str = "cuda", ephemeral_model: bool = True
     ):
         super().__init__(batch_size)
         self.device = device
         self.model = load_hf_model(MODEL_NAME, device)
-        self.tokenizer = load_tokenizer(MODEL_NAME)
+        self.tokenizer = load_tokenizer(MODEL_NAME, use_fast=False)
         self.ephemeral_model = ephemeral_model
 
-    def _classify_batch(self, batch: list[dict[str, str]]) -> list[SafetyClassifierOutput]:
+    def _classify_batch(
+        self, batch: list[dict[str, str]]
+    ) -> list[SafetyClassifierOutput]:
         assert self.model is not None
 
         formatted_prompts = self.build_input_prompts(batch)
@@ -229,7 +240,7 @@ class WildGuardHF(WildGuard):
             add_special_tokens=False,
             return_tensors="pt",
             padding=True,
-            truncation=True
+            truncation=True,
         ).to(self.device)
         generated_ids = self.model.generate(
             **tokenized_inputs,
@@ -237,18 +248,24 @@ class WildGuardHF(WildGuard):
             temperature=0.0,
             top_p=1.0,
             use_cache=True,
-            pad_token_id=self.tokenizer.eos_token_id
+            pad_token_id=self.tokenizer.eos_token_id,
         )
-        decoded_outputs = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-        decoded_outputs = [output.split("<|assistant|>")[1].strip() for output in decoded_outputs]
-        outputs = [self.parse_model_generation_to_output(output) for output in decoded_outputs]
+        decoded_outputs = self.tokenizer.batch_decode(
+            generated_ids, skip_special_tokens=True
+        )
+        decoded_outputs = [
+            output.split("<|assistant|>")[1].strip() for output in decoded_outputs
+        ]
+        outputs = [
+            self.parse_model_generation_to_output(output) for output in decoded_outputs
+        ]
 
         return outputs
 
     def classify(
-            self,
-            items: list[dict[str, str]],
-            save_func: Callable[[list[dict[str, Any]]], None] | None = None
+        self,
+        items: list[dict[str, str]],
+        save_func: Callable[[list[dict[str, Any]]], None] | None = None,
     ) -> list[dict[str, Any]]:
         if self.model is None:
             self.model = load_hf_model(MODEL_NAME, self.device)

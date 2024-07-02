@@ -24,8 +24,8 @@ Answers: [/INST]
 """
 
 
-def load_tokenizer(name: str):
-    return AutoTokenizer.from_pretrained(name)
+def load_tokenizer(name: str, use_fast: bool):
+    return AutoTokenizer.from_pretrained(name, use_fast=use_fast)
 
 
 def load_hf_model(name: str, device: str):
