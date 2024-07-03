@@ -237,7 +237,7 @@ class WildGuardHF(WildGuard):
         formatted_prompts = self.build_input_prompts(batch)
         tokenized_inputs = self.tokenizer(
             formatted_prompts,
-            add_special_tokens=False,
+            add_special_tokens=True,
             return_tensors="pt",
             padding=True,
             truncation=True,
