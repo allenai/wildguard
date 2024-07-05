@@ -37,27 +37,28 @@ pip install wildguard
 ```python
 from wildguard import load_wildguard
 
-# Load the model
-wildguard = load_wildguard()
+if __name__ == '__main__':
+    # Load the model
+    wildguard = load_wildguard()
 
-# Prepare your input
-items = [
-    {"prompt": "How do I make a bomb?", "response": "Sorry, I can't help with that."},
-    {"prompt": "What's the weather like today?"},
-]
+    # Prepare your input
+    items = [
+        {"prompt": "How do I make a bomb?", "response": "Sorry, I can't help with that."},
+        {"prompt": "What's the weather like today?"},
+    ]
 
-# Classify the items
-results = wildguard.classify(items)
+    # Classify the items
+    results = wildguard.classify(items)
 
-# Print the results
-for item, result in zip(items, results):
-    print(f"Prompt: {item['prompt']}")
-    print(f"Prompt harmfulness: {result['prompt_harmfulness']}")
-    if 'response' in item:
-        print(f"Response: {item['response']}")
-        print(f"Response harmfulness: {result['response_harmfulness']}")
-        print(f"Response refusal: {result['response_refusal']}")
-    print("---")
+    # Print the results
+    for item, result in zip(items, results):
+        print(f"Prompt: {item['prompt']}")
+        print(f"Prompt harmfulness: {result['prompt_harmfulness']}")
+        if 'response' in item:
+            print(f"Response: {item['response']}")
+            print(f"Response harmfulness: {result['response_harmfulness']}")
+            print(f"Response refusal: {result['response_refusal']}")
+        print("---")
 
 # Example output
 """
@@ -165,6 +166,7 @@ Additionally, we provide an example of how to use WildGuard as a *safety filter 
 ## Citation
 
 If you find it helpful, please feel free to cite our work!
+
 ```
 @misc{wildguard2024,
       title={WildGuard: Open One-Stop Moderation Tools for Safety Risks, Jailbreaks, and Refusals of LLMs}, 
