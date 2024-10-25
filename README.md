@@ -24,6 +24,8 @@
 
 ⭐ Co-first authors, ☀️ co-second authors
 
+🌟 WildGuard will appear at NeurIPS 2024 Datasets & Benchmarks! 🌟
+
 [WildGuard](https://arxiv.org/pdf/2406.18495) is a safety classification model for user-model chat exchanges. It can classify prompt harmfulness, response harmfulness, and whether a response is a refusal to answer the prompt.
 
 ## Installation
