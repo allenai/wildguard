@@ -28,6 +28,8 @@
 
 [WildGuard](https://arxiv.org/pdf/2406.18495) is a safety classification model for user-model chat exchanges. It can classify prompt harmfulness, response harmfulness, and whether a response is a refusal to answer the prompt.
 
+Please see our companion repository [Safety-Eval](https://github.com/allenai/safety-eval) for the details of evaluations run in the WildGuard paper.
+
 ## Installation
 
 ```bash
